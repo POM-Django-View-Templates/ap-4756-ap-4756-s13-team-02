@@ -21,24 +21,43 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand me-4" href="/">Library</a>
+            <a class="navbar-brand me-4" href="{% url 'book:book_list' %}">Library</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav" aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="mainNav">
                 <ul class="navbar-nav me-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="/auth">Login</a>
+                        <a class="nav-link" href="{% url 'book:book_list' %}">Books</a>
                     </li>
+    
+                    {% comment %}
                     <li class="nav-item">
-                        <a class="nav-link" href="/book">Books</a>
+                        <a class="nav-link" href="{% url 'author:author_list' %}">Authors</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/author">Authors</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/order">Orders</a>
-                    </li>
+                    {% endcomment %}
+    
+                    {% if user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="{% url 'order:my_orders' %}">My Orders</a>
+                        </li>
+                        {% if user.is_staff or user.is_superuser %}
+                            <li class="nav-item">
+                                <a class="nav-link" href="{% url 'order:all_orders' %}">All Orders (Admin)</a>
+                            </li>
+                        {% endif %}
+                    {% else %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth">Orders</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <ul class="navbar-nav ms-auto">
+                    {% if not user.is_authenticated %}
+                        <li class="nav-item">
+                            <a class="nav-link" href="/auth">Login</a>
+                        </li>
+                    {% endif %}
                 </ul>
             </div>
         </div>
