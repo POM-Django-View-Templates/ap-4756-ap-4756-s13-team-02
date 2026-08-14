@@ -97,6 +97,13 @@ class CustomUser(AbstractBaseUser):
         """
         return f"{CustomUser.__name__}(id={self.id})"
 
+    @property
+    def username(self):
+        """
+        Property to make email accessible as username for Django compatibility.
+        """
+        return self.email
+
     @staticmethod
     def get_by_id(user_id):
         """
