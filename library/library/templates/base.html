@@ -118,7 +118,7 @@
             text-transform: uppercase;
         }
 
-        .navbar-custom .nav-link.btn-auth-login {
+        .btn-auth-login {
             background-color: var(--accent-color);
             color: #ffffff !important;
             font-weight: 600;
@@ -126,9 +126,14 @@
             border-radius: 0.5rem;
             box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);
             transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            border: none;
         }
         
-        .navbar-custom .nav-link.btn-auth-login:hover {
+        .btn-auth-login:hover {
             background-color: var(--accent-hover);
             color: #ffffff !important;
             box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6);
@@ -455,7 +460,7 @@
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
                     {% if not request.user.is_authenticated %}
                         <li class="nav-item">
-                            <a class="nav-link btn-auth-login" href="{% url 'auth:login' %}">
+                            <a href="{% url 'auth:login' %}" class="btn-auth-login">
                                 <i class="bi bi-box-arrow-in-right"></i> Login
                             </a>
                         </li>
