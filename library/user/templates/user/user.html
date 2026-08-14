@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}User - Library Manager{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-sm border-0">
+                <div class="card-body p-5">
+                    <h1 class="card-title mb-4">User Details</h1>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">First Name</label>
+                            <p class="mb-3">{{ user.first_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Last Name</label>
+                            <p class="mb-3">{{ user.last_name }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Middle Name</label>
+                            <p class="mb-3">{{ user.middle_name|default:"—" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Email</label>
+                            <p class="mb-3">{{ user.email }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Role</label>
+                            <p class="mb-3">{{ user.get_role_name }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Status</label>
+                            <p class="mb-3">
+                                {% if user.is_active %}
+                                    <span class="badge bg-success">Active</span>
+                                {% else %}
+                                    <span class="badge bg-danger">Inactive</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Created At</label>
+                            <p class="mb-3">{{ user.created_at|date:"d M Y, H:i" }}</p>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Updated At</label>
+                            <p class="mb-3">{{ user.updated_at|date:"d M Y, H:i" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="text-muted small text-uppercase">Last Login</label>
+                            <p class="mb-3">{{ user.last_login|date:"d M Y, H:i"|default:"Never" }}</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <a href="{% url 'user:list' %}" class="btn btn-secondary">Back to Users</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

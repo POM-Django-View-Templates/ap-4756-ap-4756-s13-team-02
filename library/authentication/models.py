@@ -3,10 +3,10 @@ import datetime
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.db import models
 
-ROLE_CHOICES = (
-    (0, 'visitor'),
-    (1, 'librarian'),
-)
+
+class UserRole(models.IntegerChoices):
+    VISITOR = 0, 'visitor'
+    LIBRARIAN = 1, 'librarian'
 
 
 class CustomUserManager(BaseUserManager):
@@ -34,7 +34,7 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault('is_staff', True)
         extra_fields.setdefault('is_superuser', True)
         extra_fields.setdefault('is_active', True)
-        extra_fields.setdefault('role', 1)
+        extra_fields.setdefault('role', UserRole.LIBRARIAN)
 
         if extra_fields.get('is_staff') is not True:
             raise ValueError(('Superuser must have is_staff=True.'))
@@ -74,7 +74,7 @@ class CustomUser(AbstractBaseUser):
     password = models.CharField(default=None, max_length=255)
     created_at = models.DateTimeField(editable=False, auto_now=datetime.datetime.now())
     updated_at = models.DateTimeField(auto_now=datetime.datetime.now())
-    role = models.IntegerField(choices=ROLE_CHOICES, default=0)
+    role = models.IntegerField(choices=UserRole.choices, default=UserRole.VISITOR)
     is_active = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
@@ -238,4 +238,4 @@ class CustomUser(AbstractBaseUser):
         """
         returns str role name
         """
-        return ROLE_CHOICES[self.role][1]
+        return UserRole(self.role).label
