@@ -1,52 +1,84 @@
 {% extends "base.html" %}
 
-{% block title %}{{ book.name|default:"Book Detail" }} - Library Manager{% endblock %}
+{% block title %}{{ book.name|default:"Book Detail" }} - Library{% endblock %}
 
 {% block content %}
-<div class="mb-3">
-    <a href="{% url 'book:book_list' %}" class="text-decoration-none">&larr; Back to all books</a>
+<!-- Top Navigation Header -->
+<div class="d-flex justify-content-between align-items-center mb-4 pt-2">
+    <h1 class="h2 page-title mb-0">
+        <i class="bi bi-book"></i> Book Details
+    </h1>
+    <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Back to list
+    </a>
 </div>
 
-<div class="card shadow-sm border-0">
-    <div class="card-header bg-light d-flex justify-content-between align-items-center py-3">
-        <div>
-            <span class="text-muted font-monospace small">Book #{{ book.id }}</span>
-            <h1 class="h3 mb-0 mt-1">{{ book.name|default:"Untitled Book" }}</h1>
-        </div>
-        <div>
-            {% if book.count > 0 %}
-                <span class="badge bg-success fs-6">In Stock ({{ book.count }})</span>
-            {% else %}
-                <span class="badge bg-danger fs-6">Out of Stock</span>
-            {% endif %}
-        </div>
-    </div>
+<!-- Main Detail Card -->
+<div class="card glossy-card overflow-hidden">
     <div class="card-body p-4">
-        <div class="mb-4">
-            <h6 class="text-uppercase text-muted fw-bold small">Description</h6>
-            <div class="p-3 bg-light rounded border text-secondary">
-                {{ book.description|default:"No description available for this book." }}
+        
+        <!-- Header Banner Section -->
+        <div class="d-flex justify-content-between align-items-start pb-4 mb-4 border-bottom border-secondary border-opacity-25">
+            <div>
+                <span class="count-pill mb-2 d-inline-block">
+                    <i class="bi bi-hash"></i> Book #{{ book.id }}
+                </span>
+                <h2 class="h3 text-white fw-bold mb-0 mt-1">
+                    {{ book.name|default:"Untitled Book" }}
+                </h2>
+            </div>
+            <div>
+                {% if book.count > 0 %}
+                    <span class="badge badge-glossy-success rounded-pill px-3 py-2 fw-semibold fs-6">
+                        <i class="bi bi-check-circle me-1"></i> In Stock ({{ book.count }})
+                    </span>
+                {% else %}
+                    <span class="badge badge-glossy-danger rounded-pill px-3 py-2 fw-semibold fs-6">
+                        <i class="bi bi-x-circle me-1"></i> Out of Stock
+                    </span>
+                {% endif %}
             </div>
         </div>
 
+        <!-- Description Section -->
         <div class="mb-4">
-            <h6 class="text-uppercase text-muted fw-bold small">Authors</h6>
+            <label class="form-label-custom d-block mb-2">DESCRIPTION</label>
+            <div class="p-1 rounded-3" style="background: rgba(30, 41, 59, 0.5); border: 1px solid rgba(255, 255, 255, 0.08); color: #cbd5e1; line-height: 1.6;">
+                <p style="padding-left: 10px; padding-top: 3px;">{{ book.description|default:"No description available for this book." }}</p>
+            </div>
+        </div>
+
+        <!-- Authors Section -->
+        <div class="mb-4">
+            <label class="form-label-custom d-block mb-2">AUTHORS</label>
             <div class="d-flex flex-wrap gap-2">
                 {% for author in book.authors.all %}
-                    <span class="badge bg-primary-subtle text-primary border border-primary-subtle fs-6 py-2 px-3">
-                        {{ author.name }}
+                    <span class="author-tag px-3 py-2 fs-6">
+                        <i class="bi bi-person me-1 opacity-75"></i> {{ author.name }}
                     </span>
                 {% empty %}
-                    <span class="text-muted small">No authors listed.</span>
+                    <span class="text-secondary small italic">No authors listed.</span>
                 {% endfor %}
             </div>
         </div>
-    </div>
-    <div class="card-footer bg-light text-end py-3">
-        {% if book.count > 0 and user.is_authenticated %}
-            <a href="{% url 'order:create_order_for_book' book.id %}" class="btn btn-primary me-2">Borrow This Book</a>
-        {% endif %}
-        <a href="{% url 'book:book_list' %}" class="btn btn-secondary">Back to List</a>
+
+
+        <!-- Action Footer -->
+        <div class="d-flex w-100 justify-content-between pt-3 border-top border-secondary border-opacity-25">
+            <div>
+                <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to List
+                </a>
+            </div>
+            {% if book.count > 0 and user.is_authenticated %}
+                <div>
+                    <a href="{% url 'order:create_order_for_book' book.id %}" class="btn btn-glossy-primary">
+                        <i class="bi bi-journal-plus me-1"></i> Borrow This Book
+                    </a>
+                </div>
+            {% endif %}
+        </div>
+
     </div>
 </div>
 {% endblock %}

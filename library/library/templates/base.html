@@ -94,7 +94,6 @@
             text-transform: uppercase;
         }
 
-        /* Navbar Auth Buttons */
         .navbar-custom .nav-link.btn-auth-login {
             background-color: var(--accent-color);
             color: #ffffff !important;
@@ -158,9 +157,6 @@
             backdrop-filter: blur(8px);
         }
 
-        /* -----------------------------------------------------------------
-           4. CARDS & CONTAINERS
-           ----------------------------------------------------------------- */
         .glossy-card {
             background: rgba(15, 23, 42, 0.65);
             backdrop-filter: blur(16px);
@@ -171,9 +167,6 @@
             box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
         }
 
-        /* -----------------------------------------------------------------
-           5. FORM CONTROLS & INPUT GROUPS
-           ----------------------------------------------------------------- */
         .form-label-custom {
             font-size: 0.725rem;
             font-weight: 700;
@@ -337,14 +330,14 @@
             background-color: rgba(255, 255, 255, 0.035);
         }
 
-        .book-title-link {
-            color: #f8fafc;
+        .deco-link {
+            color: #949ef7;
             font-weight: 600;
             transition: color 0.15s ease, text-shadow 0.15s ease;
         }
 
-        .book-title-link:hover {
-            color: #818cf8;
+        .deco-link:hover {
+            color: #4d50f0;
             text-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
         }
 
@@ -393,7 +386,7 @@
                             <i class="bi bi-book"></i> Books
                         </a>
                     </li>
-                    {% if user.is_authenticated %}
+                    {% if request.user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link" href="{% url 'order:my_orders' %}">
                                 <i class="bi bi-box-seam"></i> My Orders
@@ -404,7 +397,7 @@
                                 <i class="bi bi-people"></i> Users
                             </a>
                         </li>
-                        {% if user.is_staff or user.is_superuser %}
+                        {% if request.user.is_staff or request.user.is_superuser %}
                             <li class="nav-item">
                                 <a class="nav-link" href="{% url 'author:list' %}">
                                     <i class="bi bi-pen"></i> Authors <span class="staff-badge ms-1">ADMIN</span>
@@ -420,7 +413,7 @@
                 </ul>
                 
                 <ul class="navbar-nav ms-auto align-items-lg-center gap-2">
-                    {% if not user.is_authenticated %}
+                    {% if not request.user.is_authenticated %}
                         <li class="nav-item">
                             <a class="nav-link btn-auth-login" href="{% url 'auth:login' %}">
                                 <i class="bi bi-box-arrow-in-right"></i> Login
