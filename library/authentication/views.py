@@ -12,8 +12,10 @@ def login_view(request):
         password = request.POST.get("password")
 
         if not email or not password:
-            messages.error(request, "Both fields are required")
-            return redirect("login")
+            messages.error(request, "Email and password are required")
+            return render(request, "authentication/login.html", {
+                "email": email
+            })
         
         try:
             user = User.objects.get(email=email)
@@ -25,7 +27,9 @@ def login_view(request):
             pass
 
         messages.error(request, "Invalid email or password")
-        return redirect("login")
+        return render(request, "authentication/login.html", {
+                "email": email
+            })
 
     return render(request, "authentication/login.html")
 
@@ -35,19 +39,27 @@ def register_view(request):
         email = request.POST.get("email")
         password = request.POST.get("password")
         extra_fields = {
-            "first_name": request.POST.get("fname"),
-            "last_name": request.POST.get("lname"),
-            "middle_name": request.POST.get("mname"),
+            "first_name": request.POST.get("first_name"),
+            "last_name": request.POST.get("last_name"),
+            "middle_name": request.POST.get("middle_name"),
             "is_active": True,
         }
 
         if not email or not password:
-            messages.error(request, "Both fields are required")
-            return redirect("register")
+            messages.error(request, "Email and password are required")
+            return render(request, "authentication/register.html", {
+                "email": email,
+                "password": password,
+                **extra_fields
+            })
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "User already exists")
-            return redirect("register")
+            return render(request, "authentication/register.html", {
+                "email": email,
+                "password": password,
+                **extra_fields
+            })
 
         user = User.objects.create_user(email, password, **extra_fields)
         login(request, user)
