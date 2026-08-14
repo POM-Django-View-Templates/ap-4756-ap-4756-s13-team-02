@@ -8,6 +8,15 @@
     <span class="badge bg-secondary fs-6">Total: {{ books|length }}</span>
 </div>
 
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
+            {{ message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+    {% endfor %}
+{% endif %}
+
 <!-- Filter Form -->
 <div class="card mb-4 shadow-sm border-0">
     <div class="card-body">
@@ -44,7 +53,7 @@
                         <th scope="col">Description</th>
                         <th scope="col">Stock</th>
                         <th scope="col">Authors</th>
-                        <th scope="col" class="text-end">Action</th>
+                        <th scope="col" class="text-center">Action</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -77,9 +86,12 @@
                                     <span class="text-muted italic small">No authors</span>
                                 {% endfor %}
                             </td>
-                            <td class="text-end">
+                            <td class="text-center">
                                 {% if book.count > 0 and user.is_authenticated %}
                                     <a href="{% url 'order:create_order_for_book' book.id %}" class="btn btn-sm btn-outline-primary">Borrow</a>
+                                {% endif %}
+                                {% if request.user.is_superuser %}
+                                    <a href="{% url 'book:delete_book' book.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 {% endif %}
                             </td>
                         </tr>
