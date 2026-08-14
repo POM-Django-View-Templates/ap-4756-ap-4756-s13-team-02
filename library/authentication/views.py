@@ -13,7 +13,7 @@ def login_view(request):
 
         if not email or not password:
             messages.error(request, "Both fields are required")
-            return render(request, "authentication/login.html")
+            return redirect("login")
         
         try:
             user = User.objects.get(email=email)
@@ -25,7 +25,7 @@ def login_view(request):
             pass
 
         messages.error(request, "Invalid email or password")
-        return render(request, "authentication/login.html")
+        return redirect("login")
 
     return render(request, "authentication/login.html")
 
@@ -43,11 +43,11 @@ def register_view(request):
 
         if not email or not password:
             messages.error(request, "Both fields are required")
-            return render(request, "authentication/register.html")
+            return redirect("register")
 
         if User.objects.filter(email=email).exists():
             messages.error(request, "User already exists")
-            return render(request, "authentication/register.html")
+            return redirect("register")
 
         user = User.objects.create_user(email, password, **extra_fields)
         login(request, user)
