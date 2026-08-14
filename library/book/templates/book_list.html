@@ -93,6 +93,9 @@
                                 {% if request.user.is_superuser %}
                                     <a href="{% url 'book:delete_book' book.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
                                 {% endif %}
+                                {% if request.user.is_superuser %}
+                                    <a href="{% url 'book:book_edit' book.id %}" class="btn btn-sm btn-outline-dark">Edit</a>
+                                {% endif %} 
                             </td>
                         </tr>
                     {% endfor %}

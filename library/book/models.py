@@ -3,22 +3,24 @@ from django.db import models
 
 class Book(models.Model):
     """
-        This class represents an Author. \n
-        Attributes:
-        -----------
-        param name: Describes name of the book
-        type name: str max_length=128
-        param description: Describes description of the book
-        type description: str
-        param count: Describes count of the book
-        type count: int default=10
-        param authors: list of Authors
-        type authors: list->Author
+    This class represents an Author. \n
+    Attributes:
+    -----------
+    param name: Describes name of the book
+    type name: str max_length=128
+    param description: Describes description of the book
+    type description: str
+    param count: Describes count of the book
+    type count: int default=10
+    param authors: list of Authors
+    type authors: list->Author
     """
+
     name = models.CharField(blank=True, max_length=128)
     description = models.CharField(blank=True, max_length=256)
     count = models.IntegerField(default=10)
     id = models.AutoField(primary_key=True)
+    authors = models.ManyToManyField("author.Author", related_name="books")
 
     def __str__(self):
         """
@@ -74,7 +76,7 @@ class Book(models.Model):
         book.name = name
         book.description = description
         book.count = count
-        if (authors is not None):
+        if authors is not None:
             for elem in authors:
                 book.authors.add(elem)
         book.save()
@@ -121,7 +123,7 @@ class Book(models.Model):
         param authors: list authors
         :return: None
         """
-        if (authors is not None):
+        if authors is not None:
             for elem in authors:
                 self.authors.add(elem)
                 self.save()
@@ -133,7 +135,7 @@ class Book(models.Model):
         :return: None
         """
         for elem in self.authors.values():
-            self.authors.remove(elem['id'])
+            self.authors.remove(elem["id"])
 
     @staticmethod
     def get_all():

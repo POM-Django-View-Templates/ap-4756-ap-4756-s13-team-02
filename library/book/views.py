@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Book
@@ -36,6 +36,12 @@ def book_detail(request, id: int):
 
 
 @user_passes_test(is_admin)
+def book_edit(request, id: int):
+    book = get_object_or_404(Book, pk=id)
+    return render(request, "book_edit.html", {"book": book})
+
+
+@user_passes_test(is_admin)
 def book_delete(request, id: int):
     if request.method == "GET":
         book = Book.get_by_id(id)
@@ -44,4 +50,25 @@ def book_delete(request, id: int):
             messages.success(request, f"Book #{id} has been deleted.")
         else:
             messages.warning(request, f"Book #{id} does not exist.")
+    return redirect("book:book_list")
+
+
+@user_passes_test(is_admin)
+def book_update(request, id: int):
+    if request.method == "POST":
+        book = Book.get_by_id(id)
+        if book:
+            book.name = request.POST.get("name", "").strip()
+            book.description = request.POST.get("description", "").strip()
+            book.count = int(request.POST.get("count", 0))
+            book.save()
+
+            author_ids = request.POST.getlist("authors")
+            book.authors.set(author_ids)
+
+            messages.success(request, f"Book #{id} has been updated.")
+            return redirect("book:book_detail", id=id)
+        else:
+            messages.warning(request, f"Book #{id} does not exist.")
+
     return redirect("book:book_list")
