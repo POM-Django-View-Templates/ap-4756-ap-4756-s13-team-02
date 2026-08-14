@@ -74,10 +74,7 @@
             <div class="card-body p-4">
                 <h4 class="h6 text-danger fw-bold mb-3">DANGER ZONE</h4>
                 <p class="text-muted small mb-3">Deleting this entry will remove the ledger from the database permanently.</p>
-                <form method="post" action="{% url 'book:delete_book' book.id %}" onsubmit="return confirm('Are you sure you want to permanently delete this book configuration entry?');">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger w-100">Delete Book</button>
-                </form>
+                <a href="{% url 'book:delete_book' book.id%}" class="btn btn-outline-danger w-100">Delete Book</a>
             </div>
         </div>
     </div>
