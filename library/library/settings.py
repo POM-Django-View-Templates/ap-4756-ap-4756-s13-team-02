@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     "author",
     "book",
     "order",
+    "user",
 ]
 
 AUTH_USER_MODEL = "authentication.CustomUser"

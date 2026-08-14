@@ -24,5 +24,7 @@ urlpatterns = [
     path("book/", include("book.urls")),
     path("order/", include("order.urls")),
     path("auth/", include("authentication.urls")),
+    path("author/", include("author.urls")),
+    path("user/", include("user.urls")),
     path("", views.home, name="home"),
 ]

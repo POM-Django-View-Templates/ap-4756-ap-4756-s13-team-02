@@ -28,7 +28,8 @@ def login_view(request):
 
         messages.error(request, "Invalid email or password")
         return render(request, "authentication/login.html", {
-                "email": email
+                "email": email,
+                "password": password
             })
 
     return render(request, "authentication/login.html")
