@@ -14,11 +14,34 @@
             --accent-hover: #4f46e5;
         }
 
+
+        @keyframes fadeOut {
+            to { 
+                opacity: 0; 
+                filter: blur(2px); 
+                transform: scale(0.99); 
+            }
+        }
+
+        @keyframes scaleIn {
+            from { 
+                opacity: 0; 
+                filter: blur(4px); 
+                transform: scale(0.96); 
+            }
+            to { 
+                opacity: 1; 
+                filter: blur(0); 
+                transform: scale(1); 
+            }
+        }
+
         body {
             background-color: #090d16;
             color: #f1f5f9;
             font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
             min-height: 100vh;
+            overflow-y: scroll; 
         }
 
         main {
@@ -70,7 +93,7 @@
         .navbar-custom .nav-link i {
             font-size: 1.2rem;
             opacity: 0.8;
-            transition: opacity 0.2s ease;
+            transition: opacity 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
         }
 
         .navbar-custom .nav-link:hover {
@@ -80,6 +103,7 @@
 
         .navbar-custom .nav-link:hover i {
             opacity: 1;
+            transform: scale(1.15);
         }
 
         .staff-badge {
@@ -100,14 +124,15 @@
             font-weight: 600;
             padding: 0.45rem 1.1rem !important;
             border-radius: 0.5rem;
-            box-shadow: 0 0px 14px rgba(99, 102, 241, 0.45);
-            transition: all 0.2s ease;
+            box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
         }
         
         .navbar-custom .nav-link.btn-auth-login:hover {
             background-color: var(--accent-hover);
             color: #ffffff !important;
-            box-shadow: 0 0px 20px rgba(99, 102, 241, 0.45);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6);
+            transform: scale(1.04);
         }
 
         .btn-auth-logout {
@@ -117,14 +142,15 @@
             font-weight: 500;
             padding: 0.45rem 0.95rem !important;
             border-radius: 0.5rem;
-            transition: all 0.2s ease !important;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1) !important;
         }
 
         .btn-auth-logout:hover {
             color: #ffffff !important; 
             background-color: #ef4444 !important;
             border-color: #ef4444 !important;
-            box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+            box-shadow: 0 4px 18px rgba(239, 68, 68, 0.4);
+            transform: scale(1.04);
         }
         
         .page-title {
@@ -165,6 +191,12 @@
             border-top: 1px solid rgba(255, 255, 255, 0.18);
             border-radius: 1rem;
             box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
+            transition: transform 0.3s cubic-bezier(0.22, 1, 0.36, 1), box-shadow 0.3s ease;
+        }
+        
+        .glossy-card:hover {
+            transform: scale(1.015);
+            box-shadow: 0 16px 40px 0 rgba(0, 0, 0, 0.55), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
         }
 
         .form-label-custom {
@@ -178,12 +210,13 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 0.5rem;
             overflow: hidden;
-            transition: all 0.2s ease;
+            transition: all 0.3s ease;
         }
         
         .input-group-glossy:focus-within {
             border-color: #818cf8;
             box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
+            transform: scale(1.01);
         }
         
         .input-group-glossy .input-group-text {
@@ -192,7 +225,7 @@
             color: #94a3b8;
             padding-left: 0.85rem;
             padding-right: 0.5rem;
-            transition: color 0.2s ease;
+            transition: color 0.3s ease;
         }
         
         .input-group-glossy .form-control {
@@ -217,15 +250,16 @@
             font-weight: 600;
             padding: 0.45rem 1.1rem !important;
             border-radius: 0.5rem;
-            box-shadow: 0 0px 14px rgba(99, 102, 241, 0.45);
-            transition: all 0.2s ease;
+            box-shadow: 0 0 14px rgba(99, 102, 241, 0.45);
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             border: none;
         }
 
         .btn-glossy-primary:hover {
             background-color: var(--accent-hover);
             color: #ffffff !important;
-            box-shadow: 0 0px 20px rgba(99, 102, 241, 0.45);
+            box-shadow: 0 4px 20px rgba(99, 102, 241, 0.6);
+            transform: scale(1.04);
         }
 
         .btn-glossy-secondary {
@@ -234,7 +268,7 @@
             border: 1px solid rgba(255, 255, 255, 0.12);
             padding: 0.5rem 1rem;
             border-radius: 0.6rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             text-decoration: none;
             display: inline-flex;
             align-items: center;
@@ -244,9 +278,9 @@
             background: rgba(255, 255, 255, 0.1);
             color: #ffffff !important;
             border-color: rgba(255, 255, 255, 0.25);
+            transform: scale(1.04);
         }
 
-        /* Table Action Buttons */
         .action-btn {
             padding: 0.38rem 0.7rem;
             font-size: 0.825rem;
@@ -255,8 +289,12 @@
             display: inline-flex;
             align-items: center;
             gap: 0.35rem;
-            transition: all 0.2s ease;
+            transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
             text-decoration: none;
+        }
+        
+        .action-btn:hover {
+            transform: scale(1.06);
         }
 
         .action-btn-borrow {
@@ -269,7 +307,7 @@
             background: #6366f1;
             color: #ffffff;
             border-color: #6366f1;
-            box-shadow: 0 0 14px rgba(99, 102, 241, 0.5);
+            box-shadow: 0 4px 14px rgba(99, 102, 241, 0.5);
         }
 
         .action-btn-edit {
@@ -282,6 +320,7 @@
             background: rgba(255, 255, 255, 0.15);
             color: #ffffff;
             border-color: rgba(255, 255, 255, 0.3);
+            box-shadow: 0 4px 14px rgba(255, 255, 255, 0.1);
         }
 
         .action-btn-delete {
@@ -294,7 +333,7 @@
             background: #ef4444;
             color: #ffffff;
             border-color: #ef4444;
-            box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
+            box-shadow: 0 4px 14px rgba(239, 68, 68, 0.5);
         }
 
         .table-glossy {
@@ -320,25 +359,26 @@
         .table-glossy td {
             padding: 1.1rem 1.2rem;
             border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-        }
-
-        .table-glossy tbody tr {
             transition: background-color 0.2s ease;
         }
 
+        .table-glossy tbody tr {
+            transition: background-color 0.2s ease, transform 0.2s ease;
+        }
+
         .table-glossy tbody tr:hover {
-            background-color: rgba(255, 255, 255, 0.035);
+            background-color: rgba(255, 255, 255, 0.045);
         }
 
         .deco-link {
             color: #949ef7;
             font-weight: 600;
-            transition: color 0.15s ease, text-shadow 0.15s ease;
+            transition: color 0.2s ease, text-shadow 0.2s ease;
         }
 
         .deco-link:hover {
             color: #4d50f0;
-            text-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
+            text-shadow: 0 0 12px rgba(129, 140, 248, 0.5);
         }
 
         .badge-glossy-success {
