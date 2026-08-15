@@ -1,9 +1,13 @@
 {% extends "base.html" %}
 
-{% block title %}Edit {{ book.name|default:"Book" }}{% endblock %}
+{% block title %}
+    {# If book exists, it's edit mode. Otherwise, it's create mode #}
+    {% if book %}Edit {{ book.name }}{% else %}Create New Book{% endif %}
+{% endblock %}
 
 {% block content %}
 <style>
+    /* ... keep your existing glossy styles intact ... */
     .form-control-glossy,
     .form-select-glossy {
         background: rgba(30, 41, 59, 0.6) !important;
@@ -37,16 +41,21 @@
 <!-- Header Row -->
 <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
     <h1 class="h2 page-title mb-0">
-        <i class="bi bi-pencil-square"></i> Editing "{{ book.name|default:"Book" }}"
+        {% if book %}
+            <i class="bi bi-pencil-square"></i> Editing "{{ book.name }}"
+        {% else %}
+            <i class="bi bi-plus-square"></i> Create New Book
+        {% endif %}
     </h1>
 </div>
 
 <div class="row g-4">
     <!-- Main Workspace Area -->
-    <div class="col-lg-8">
+    <div class="col-lg-{% if book %}8{% else %}12{% endif %}"> {# Full width on create, split on edit #}
         <div class="card glossy-card mb-4">
             <div class="card-body p-4">
-                <form method="post" action="{% url 'book:book_edit' book.id %}">
+                {# Dynamically routing the form action path #}
+                <form method="post" action="{% if book %}{% url 'book:book_update' book.id %}{% else %}{% url 'book:book_create' %}{% endif %}">
                     {% csrf_token %}
                     
                     <div class="row g-3 mb-3">
@@ -55,7 +64,7 @@
                             <label for="name" class="form-label form-label-custom">TITLE</label>
                             <div class="input-group input-group-glossy">
                                 <span class="input-group-text"><i class="bi bi-book"></i></span>
-                                <input type="text" name="name" id="name" value="{{ book.name }}" class="form-control border-start-0 ps-0" required>
+                                <input type="text" name="name" id="name" value="{{ book.name|default:'' }}" class="form-control border-start-0 ps-0" required>
                             </div>
                         </div>
                         
@@ -64,7 +73,7 @@
                             <label for="count" class="form-label form-label-custom">STOCK COUNT</label>
                             <div class="input-group input-group-glossy">
                                 <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-                                <input type="number" name="count" id="count" value="{{ book.count }}" min="0" class="form-control border-start-0 ps-0" required>
+                                <input type="number" name="count" id="count" value="{{ book.count|default:0 }}" min="0" class="form-control border-start-0 ps-0" required>
                             </div>
                         </div>
                     </div>
@@ -72,7 +81,7 @@
                     <!-- Description Field -->
                     <div class="mb-3">
                         <label for="description" class="form-label form-label-custom">DESCRIPTION</label>
-                        <textarea name="description" id="description" rows="5" class="form-control form-control-glossy" placeholder="Provide a summary for this collection index...">{{ book.description }}</textarea>
+                        <textarea name="description" id="description" rows="5" class="form-control form-control-glossy" placeholder="Provide a summary for this collection index...">{{ book.description|default:'' }}</textarea>
                     </div>
 
                     <!-- Authors Multi-Select Field -->
@@ -80,23 +89,23 @@
                         <label for="authors" class="form-label form-label-custom">AUTHORS</label>
                         <select name="authors" id="authors" class="form-select form-select-glossy" multiple style="min-height: 130px;">
                             {% for author in all_authors %}
-                                <option value="{{ author.id }}" {% if author in book.authors.all %}selected{% endif %}>
+                                <option value="{{ author.id }}" {% if book and author in book.authors.all %}selected{% endif %}>
                                     {{ author.name }} {{ author.surname }}
                                 </option>
                             {% endfor %}
                         </select>
                         <div class="form-text small text-white mt-1">
-                            <i class="bi bi-info-circle me-1"></i> Hold down <kbd class="bg-dark text-light border border-secondary">Ctrl</kbd> (Windows) or <kbd class="bg-dark text-light border border-secondary">Cmd</kbd> (Mac) to select multiple items.
+                            <i class="bi bi-info-circle me-1"></i> Hold down <kbd class="bg-dark text-light border border-secondary">Ctrl</kbd> or <kbd class="bg-dark text-light border border-secondary">Cmd</kbd> to select multiple.
                         </div>
                     </div>
 
-                    <!-- Action Buttons Core Footer Block -->
+                    <!-- Action Buttons -->
                     <div class="d-flex justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-25">
                         <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
                             <i class="bi bi-x-lg me-1"></i> Discard
                         </a>
                         <button type="submit" class="btn btn-glossy-primary">
-                            <i class="bi bi-check-lg me-1"></i> Save Changes
+                            <i class="bi bi-check-lg me-1"></i> {% if book %}Save Changes{% else %}Create Book{% endif %}
                         </button>
                     </div>
                 </form>
@@ -104,6 +113,8 @@
         </div>
     </div>
 
+    {# Hide Danger Zone completely if creating a book #}
+    {% if book %}
     <!-- Right Sidebar Utilities -->
     <div class="col-lg-4">
         <div class="card glossy-card card-danger-glossy">
@@ -118,5 +129,6 @@
             </div>
         </div>
     </div>
+    {% endif %}
 </div>
 {% endblock %}
