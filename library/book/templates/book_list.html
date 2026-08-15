@@ -42,16 +42,25 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-secondary border-opacity-25">
-                {% if search_title or search_author %}
-                    <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
-                        <i class="bi bi-x-circle me-1"></i> Clear Filters
+            <div class="d-flex mt-4 pt-3 border-top border-secondary border-opacity-25">
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'book:book_create' %}" class="btn btn-glossy-primary me-auto">
+                        <i class="bi bi-plus-square me-1"></i> Create Book
                     </a>
                 {% endif %}
-                <button type="submit" class="btn btn-glossy-primary">
-                    <i class="bi bi-funnel me-1"></i> Apply Filters
-                </button>
+            
+                <div class="d-flex {% if not request.user.is_superuser and search_title or search_author %}w-100 justify-content-between{% else %}ms-auto gap-2{% endif %}">
+                    <button type="submit" class="btn btn-glossy-secondary">
+                        <i class="bi bi-funnel me-1"></i> Apply Filters
+                    </button>
+                    {% if search_title or search_author %}
+                        <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Clear Filters
+                        </a>
+                    {% endif %}
+                </div>
             </div>
+
         </form>
     </div>
 </div>
