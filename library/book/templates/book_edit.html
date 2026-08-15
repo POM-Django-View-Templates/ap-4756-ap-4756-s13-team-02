@@ -81,7 +81,7 @@
                         <select name="authors" id="authors" class="form-select form-select-glossy" multiple style="min-height: 130px;">
                             {% for author in all_authors %}
                                 <option value="{{ author.id }}" {% if author in book.authors.all %}selected{% endif %}>
-                                    {{ author.name }} {{ author.surname }}
+                                    {{ author.name }} {{ author.surname }} {{ author.patronymic }}
                                 </option>
                             {% endfor %}
                         </select>

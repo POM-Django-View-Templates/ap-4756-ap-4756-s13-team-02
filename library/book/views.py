@@ -2,6 +2,7 @@ from author.models import Author
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
+from django.core.exceptions import PermissionDenied
 from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
@@ -9,7 +10,9 @@ from .models import Book
 
 
 def is_admin(user: User) -> bool:
-    return user.is_staff or user.is_superuser
+    if user.is_authenticated and user.is_staff:
+        return True
+    raise PermissionDenied
 
 
 def book_list(request: HttpRequest) -> HttpResponse:

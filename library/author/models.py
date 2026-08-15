@@ -66,7 +66,7 @@ class Author(models.Model):
             return False
 
     @staticmethod
-    def create(name, surname, patronymic=""):
+    def create(name: str, surname: str, patronymic: str = ""):
         """
         param name: Describes name of the author
         type name: str max_length=20
