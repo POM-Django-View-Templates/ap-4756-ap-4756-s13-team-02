@@ -3,250 +3,6 @@
 {% block title %}Books Collection{% endblock %}
 
 {% block content %}
-<style>
-    body {
-        background: #090d16 !important;
-        color: #f1f5f9;
-    }
-
-    .page-title {
-        font-weight: 700;
-        font-size: 1.85rem;
-        letter-spacing: -0.02em;
-        background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
-        -webkit-background-clip: text;
-        -webkit-text-fill-color: transparent;
-        display: flex;
-        align-items: center;
-        gap: 0.75rem;
-    }
-
-    .page-title i {
-        -webkit-text-fill-color: initial;
-        color: #818cf8;
-        filter: drop-shadow(0 0 10px rgba(129, 140, 248, 0.4));
-    }
-
-    .count-pill {
-        background: rgba(99, 102, 241, 0.12);
-        color: #a5b4fc;
-        border: 1px solid rgba(129, 140, 248, 0.3);
-        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 0 12px rgba(99, 102, 241, 0.15);
-        font-weight: 600;
-        font-size: 0.85rem;
-        padding: 0.4rem 0.95rem;
-        border-radius: 2rem;
-        backdrop-filter: blur(8px);
-    }
-
-    .glossy-card {
-        background: rgba(15, 23, 42, 0.65);
-        backdrop-filter: blur(16px);
-        -webkit-backdrop-filter: blur(16px);
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        border-top: 1px solid rgba(255, 255, 255, 0.18);
-        border-radius: 1rem;
-        box-shadow: 0 12px 32px 0 rgba(0, 0, 0, 0.45), inset 0 1px 0 0 rgba(255, 255, 255, 0.08);
-    }
-
-    .form-label-custom {
-        font-size: 0.725rem;
-        font-weight: 700;
-        letter-spacing: 0.08em;
-        color: #94a3b8;
-    }
-
-    .input-group-glossy {
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        border-radius: 0.5rem;
-        overflow: hidden;
-        transition: all 0.2s ease;
-    }
-    
-    .input-group-glossy:focus-within {
-        border-color: #818cf8;
-        box-shadow: 0 0 20px rgba(99, 102, 241, 0.3);
-    }
-    
-    .input-group-glossy .input-group-text {
-        background: rgba(30, 41, 59, 0.6);
-        border: none;
-        color: #94a3b8;
-        padding-left: 0.85rem;
-        padding-right: 0.5rem;
-        transition: color 0.2s ease;
-    }
-    
-    .input-group-glossy .form-control {
-        background: rgba(30, 41, 59, 0.6);
-        border: none;
-        color: #f8fafc;
-        font-size: 0.95rem;
-        box-shadow: none !important;
-    }
-    
-    .input-group-glossy .form-control::placeholder {
-        color: #64748b;
-    }
-    
-    .input-group-glossy:focus-within .input-group-text {
-        color: #a5b4fc;
-    }
-
-    .btn-glossy-primary {
-        background-color: var(--accent-color);
-        color: #ffffff !important;
-        font-weight: 600;
-        padding: 0.45rem 1.1rem !important;
-        border-radius: 0.5rem;
-        box-shadow: 0 0px 14px rgba(99, 102, 241, 0.45);
-        transition: all 0.2s ease;
-    }
-
-    .btn-glossy-primary:hover {
-        background-color: var(--accent-hover);
-        color: #ffffff !important;
-        box-shadow: 0 0px 20px rgba(99, 102, 241, 0.45);
-    }
-
-    .btn-glossy-secondary {
-        background: rgba(255, 255, 255, 0.05);
-        color: #cbd5e1 !important;
-        border: 1px solid rgba(255, 255, 255, 0.12);
-        padding: 0.5rem 1rem;
-        border-radius: 0.6rem;
-        transition: all 0.2s ease;
-    }
-
-    .btn-glossy-secondary:hover {
-        background: rgba(255, 255, 255, 0.1);
-        color: #ffffff !important;
-        border-color: rgba(255, 255, 255, 0.25);
-    }
-
-    /* Glossy Table Styling */
-    .table-glossy {
-        color: #cbd5e1;
-        --bs-table-bg: transparent;
-    }
-
-    .table-glossy thead {
-        background: rgba(15, 23, 42, 0.85);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-    }
-
-    .table-glossy th {
-        font-size: 0.725rem;
-        text-transform: uppercase;
-        letter-spacing: 0.06em;
-        color: #94a3b8;
-        font-weight: 700;
-        padding: 1rem 1.2rem;
-        border: none;
-    }
-
-    .table-glossy td {
-        padding: 1.1rem 1.2rem;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    }
-
-    .table-glossy tbody tr {
-        transition: background-color 0.2s ease;
-    }
-
-    .table-glossy tbody tr:hover {
-        background-color: rgba(255, 255, 255, 0.035);
-    }
-
-    .book-title-link {
-        color: #f8fafc;
-        font-weight: 600;
-        transition: color 0.15s ease, text-shadow 0.15s ease;
-    }
-
-    .book-title-link:hover {
-        color: #818cf8;
-        text-shadow: 0 0 10px rgba(129, 140, 248, 0.3);
-    }
-
-    /* Badges */
-    .badge-glossy-success {
-        background: rgba(16, 185, 129, 0.12);
-        color: #34d399;
-        border: 1px solid rgba(52, 211, 153, 0.3);
-        box-shadow: 0 0 10px rgba(16, 185, 129, 0.15);
-    }
-
-    .badge-glossy-danger {
-        background: rgba(239, 68, 68, 0.12);
-        color: #f87171;
-        border: 1px solid rgba(248, 113, 113, 0.3);
-        box-shadow: 0 0 10px rgba(239, 68, 68, 0.15);
-    }
-
-    .author-tag {
-        background: rgba(255, 255, 255, 0.05);
-        color: #cbd5e1;
-        border: 1px solid rgba(255, 255, 255, 0.1);
-        font-weight: 500;
-        font-size: 0.78rem;
-        padding: 0.25rem 0.6rem;
-        border-radius: 0.4rem;
-        backdrop-filter: blur(4px);
-    }
-
-    /* Action Buttons */
-    .action-btn {
-        padding: 0.38rem 0.7rem;
-        font-size: 0.825rem;
-        font-weight: 500;
-        border-radius: 0.5rem;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.35rem;
-        transition: all 0.2s ease;
-        text-decoration: none;
-    }
-
-    .action-btn-borrow {
-        color: #a5b4fc;
-        border: 1px solid rgba(129, 140, 248, 0.3);
-        background: rgba(99, 102, 241, 0.1);
-    }
-
-    .action-btn-borrow:hover {
-        background: #6366f1;
-        color: #ffffff;
-        border-color: #6366f1;
-        box-shadow: 0 0 14px rgba(99, 102, 241, 0.5);
-    }
-
-    .action-btn-edit {
-        color: #e2e8f0;
-        border: 1px solid rgba(255, 255, 255, 0.15);
-        background: rgba(255, 255, 255, 0.05);
-    }
-
-    .action-btn-edit:hover {
-        background: rgba(255, 255, 255, 0.15);
-        color: #ffffff;
-        border-color: rgba(255, 255, 255, 0.3);
-    }
-
-    .action-btn-delete {
-        color: #fca5a5;
-        border: 1px solid rgba(239, 68, 68, 0.3);
-        background: rgba(239, 68, 68, 0.1);
-    }
-
-    .action-btn-delete:hover {
-        background: #ef4444;
-        color: #ffffff;
-        border-color: #ef4444;
-        box-shadow: 0 0 14px rgba(239, 68, 68, 0.5);
-    }
-</style>
-
 <!-- Header Row -->
 <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
     <h1 class="h2 page-title mb-0">
@@ -286,16 +42,25 @@
                     </div>
                 </div>
             </div>
-            <div class="d-flex justify-content-end gap-2 mt-4 pt-3 border-top border-secondary border-opacity-25">
-                {% if search_title or search_author %}
-                    <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
-                        <i class="bi bi-x-circle me-1"></i> Clear Filters
+            <div class="d-flex mt-4 pt-3 border-top border-secondary border-opacity-25">
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'book:book_create' %}" class="btn btn-glossy-primary me-auto">
+                        <i class="bi bi-plus-square me-1"></i> Create Book
                     </a>
                 {% endif %}
-                <button type="submit" class="btn btn-glossy-primary">
-                    <i class="bi bi-funnel me-1"></i> Apply Filters
-                </button>
+            
+                <div class="d-flex {% if not request.user.is_superuser and search_title or search_author %}w-100 justify-content-between{% else %}ms-auto gap-2{% endif %}">
+                    <button type="submit" class="btn btn-glossy-secondary">
+                        <i class="bi bi-funnel me-1"></i> Apply Filters
+                    </button>
+                    {% if search_title or search_author %}
+                        <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
+                            <i class="bi bi-x-circle me-1"></i> Clear Filters
+                        </a>
+                    {% endif %}
+                </div>
             </div>
+
         </form>
     </div>
 </div>
@@ -318,12 +83,8 @@
                 <tbody>
                     {% for book in books %}
                         <tr>
-                            <td class="text-white small fw-semibold">#{{ book.id }}</td>
-                            <td>
-                                <a href="{% url 'book:book_detail' book.id %}" class="book-title-link text-decoration-none">
-                                    {{ book.name|default:"Untitled" }}
-                                </a>
-                            </td>
+                            <td class="text-white small fw-semibold"><a href="{% url 'book:book_detail' book.id %}" class="deco-link text-decoration-none">#{{ book.id }}</a></td> 
+                            <td class="text-white small fw-semibold"><a href="{% url 'book:book_detail' book.id %}" class="deco-link text-decoration-none">{{ book.name|default:"Untitled" }}</a></td>
                             <td class="text-white text-truncate" style="max-width: 260px;">
                                 {{ book.description|default:"No description provided." }}
                             </td>

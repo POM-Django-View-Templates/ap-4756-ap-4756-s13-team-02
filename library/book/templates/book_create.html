@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Edit {{ book.name|default:"Book" }}{% endblock %}
+{% block title %}Create New Book{% endblock %}
 
 {% block content %}
 <style>
@@ -28,16 +28,17 @@
         background: #4f46e5 !important;
         color: #ffffff !important;
     }
-    .card-danger-glossy {
-        border: 1px solid rgba(239, 68, 68, 0.25) !important;
-        border-top: 1px solid rgba(239, 68, 68, 0.45) !important;
+    .card-info-glossy {
+        border: 1px solid rgba(99, 102, 241, 0.25) !important;
+        border-top: 1px solid rgba(99, 102, 241, 0.45) !important;
+        background: linear-gradient(135deg, rgba(99, 102, 241, 0.05), rgba(0, 0, 0, 0));
     }
 </style>
 
 <!-- Header Row -->
 <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
     <h1 class="h2 page-title mb-0">
-        <i class="bi bi-pencil-square"></i> Editing "{{ book.name|default:"Book" }}"
+        <i class="bi bi-journal-plus"></i> Create New Book
     </h1>
 </div>
 
@@ -46,7 +47,7 @@
     <div class="col-lg-8">
         <div class="card glossy-card mb-4">
             <div class="card-body p-4">
-                <form method="post" action="{% url 'book:book_edit' book.id %}">
+                <form method="post" action="{% url 'book:book_create' %}">
                     {% csrf_token %}
                     
                     <div class="row g-3 mb-3">
@@ -55,16 +56,16 @@
                             <label for="name" class="form-label form-label-custom">TITLE</label>
                             <div class="input-group input-group-glossy">
                                 <span class="input-group-text"><i class="bi bi-book"></i></span>
-                                <input type="text" name="name" id="name" value="{{ book.name }}" class="form-control border-start-0 ps-0" required>
+                                <input type="text" name="name" id="name" class="form-control border-start-0 ps-0" placeholder="Enter book title" required>
                             </div>
                         </div>
                         
                         <!-- Stock Counts Field -->
                         <div class="col-md-4">
-                            <label for="count" class="form-label form-label-custom">STOCK COUNT</label>
+                            <label for="count" class="form-label form-label-custom">INITIAL STOCK</label>
                             <div class="input-group input-group-glossy">
                                 <span class="input-group-text"><i class="bi bi-boxes"></i></span>
-                                <input type="number" name="count" id="count" value="{{ book.count }}" min="0" class="form-control border-start-0 ps-0" required>
+                                <input type="number" name="count" id="count" value="1" min="0" class="form-control border-start-0 ps-0" required>
                             </div>
                         </div>
                     </div>
@@ -72,7 +73,7 @@
                     <!-- Description Field -->
                     <div class="mb-3">
                         <label for="description" class="form-label form-label-custom">DESCRIPTION</label>
-                        <textarea name="description" id="description" rows="5" class="form-control form-control-glossy" placeholder="Provide a summary for this collection index...">{{ book.description }}</textarea>
+                        <textarea name="description" id="description" rows="5" class="form-control form-control-glossy" placeholder="Provide a summary for this collection index..."></textarea>
                     </div>
 
                     <!-- Authors Multi-Select Field -->
@@ -80,7 +81,7 @@
                         <label for="authors" class="form-label form-label-custom">AUTHORS</label>
                         <select name="authors" id="authors" class="form-select form-select-glossy" multiple style="min-height: 130px;">
                             {% for author in all_authors %}
-                                <option value="{{ author.id }}" {% if author in book.authors.all %}selected{% endif %}>
+                                <option value="{{ author.id }}">
                                     {{ author.name }} {{ author.surname }}
                                 </option>
                             {% endfor %}
@@ -93,10 +94,10 @@
                     <!-- Action Buttons Core Footer Block -->
                     <div class="d-flex justify-content-end gap-2 pt-3 border-top border-secondary border-opacity-25">
                         <a href="{% url 'book:book_list' %}" class="btn btn-glossy-secondary">
-                            <i class="bi bi-x-lg me-1"></i> Discard
+                            <i class="bi bi-x-lg me-1"></i> Cancel
                         </a>
                         <button type="submit" class="btn btn-glossy-primary">
-                            <i class="bi bi-check-lg me-1"></i> Save Changes
+                            <i class="bi bi-plus-circle me-1"></i> Create Book
                         </button>
                     </div>
                 </form>
@@ -106,15 +107,18 @@
 
     <!-- Right Sidebar Utilities -->
     <div class="col-lg-4">
-        <div class="card glossy-card card-danger-glossy">
+        <div class="card glossy-card card-info-glossy">
             <div class="card-body p-4">
-                <h4 class="h6 text-danger fw-bold mb-3 d-flex align-items-center gap-2">
-                    <i class="bi bi-exclamation-triangle-fill"></i> DANGER ZONE
+                <h4 class="h6 text-indigo fw-bold mb-3 d-flex align-items-center gap-2" style="color: #a5b4fc;">
+                    <i class="bi bi-lightbulb-fill"></i> TIPS
                 </h4>
-                <p class="text-secondary small mb-3">Deleting this entry will remove the record from the database permanently.</p>
-                <a href="{% url 'book:delete_book' book.id %}" class="action-btn action-btn-delete w-100 justify-content-center py-2">
-                    <i class="bi bi-trash me-1"></i> Delete Book
-                </a>
+                <p class="text-secondary small mb-3">
+                    Ensure the title and spelling match the publisher's details to prevent duplicate entries in the database.
+                </p>
+                <ul class="text-secondary small mb-0 ps-3">
+                    <li class="mb-2"><strong>Stock:</strong> Enter the exact physical quantity available for borrowing.</li>
+                    <li><strong>Authors:</strong> If the author is missing, they must be added to the database first.</li>
+                </ul>
             </div>
         </div>
     </div>

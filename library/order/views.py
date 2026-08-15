@@ -4,24 +4,26 @@ from datetime import timedelta
 from book.models import Book
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.models import User
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
 
 from .models import Order
 
 
-def is_admin(user):
+def is_admin(user: User) -> bool:
     return user.is_staff or user.is_superuser
 
 
 @user_passes_test(is_admin)
-def all_orders(request):
+def all_orders(request: HttpRequest) -> HttpResponse:
     orders = Order.objects.select_related("user", "book").all().order_by("-created_at")
     return render(request, "order_list.html", {"orders": orders})
 
 
 @login_required
-def my_orders(request):
+def my_orders(request: HttpRequest) -> HttpResponse:
     orders = (
         Order.objects.filter(user=request.user)
         .select_related("book")
@@ -31,7 +33,7 @@ def my_orders(request):
 
 
 @login_required
-def create_order(request, book_id=None):
+def create_order(request: HttpRequest, book_id: int | None = None) -> HttpResponse:
     if request.method == "POST":
         selected_book_id = request.POST.get("book_id") or book_id
         book = get_object_or_404(Book, pk=selected_book_id)
@@ -50,7 +52,7 @@ def create_order(request, book_id=None):
                 request,
                 "Unable to create order. The book might be out of stock or unavailable.",
             )
-            return redirect("book:home")
+            return redirect("book:book_list")
 
     books = Book.objects.filter(count__gt=0)
     selected_book = get_object_or_404(Book, pk=book_id) if book_id else None
@@ -62,7 +64,7 @@ def create_order(request, book_id=None):
 
 
 @user_passes_test(is_admin)
-def close_order(request, order_id):
+def close_order(request: HttpRequest, order_id: int) -> HttpResponse:
     if request.method == "POST":
         order = get_object_or_404(Order, pk=order_id)
         if not order.end_at:

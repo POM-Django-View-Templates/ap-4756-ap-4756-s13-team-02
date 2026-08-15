@@ -17,7 +17,7 @@ class Book(models.Model):
     """
 
     name = models.CharField(blank=True, max_length=128)
-    description = models.CharField(blank=True, max_length=256)
+    description = models.CharField(blank=True, max_length=2048)
     count = models.IntegerField(default=10)
     id = models.AutoField(primary_key=True)
     authors = models.ManyToManyField("author.Author", related_name="books")

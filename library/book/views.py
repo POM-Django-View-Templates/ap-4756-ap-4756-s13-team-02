@@ -1,15 +1,17 @@
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
+from django.contrib.auth.models import User
+from django.http import HttpRequest, HttpResponse
 from django.shortcuts import get_object_or_404, redirect, render
 
 from .models import Book
 
 
-def is_admin(user):
+def is_admin(user: User) -> bool:
     return user.is_staff or user.is_superuser
 
 
-def book_list(request):
+def book_list(request: HttpRequest) -> HttpResponse:
     books = Book.objects.all()
 
     search_title = request.GET.get("title", "").strip()
@@ -30,19 +32,13 @@ def book_list(request):
     return render(request, "book_list.html", context)
 
 
-def book_detail(request, id: int):
+def book_detail(request: HttpRequest, id: int) -> HttpResponse:
     book = get_object_or_404(Book, pk=id)
     return render(request, "book_detail.html", {"book": book})
 
 
 @user_passes_test(is_admin)
-def book_edit(request, id: int):
-    book = get_object_or_404(Book, pk=id)
-    return render(request, "book_edit.html", {"book": book})
-
-
-@user_passes_test(is_admin)
-def book_delete(request, id: int):
+def book_delete(request: HttpRequest, id: int) -> HttpResponse:
     if request.method == "GET":
         book = Book.get_by_id(id)
         if book:
@@ -54,7 +50,7 @@ def book_delete(request, id: int):
 
 
 @user_passes_test(is_admin)
-def book_update(request, id: int):
+def book_edit(request: HttpRequest, id: int) -> HttpResponse:
     if request.method == "POST":
         book = Book.get_by_id(id)
         if book:
@@ -70,5 +66,25 @@ def book_update(request, id: int):
             return redirect("book:book_detail", id=id)
         else:
             messages.warning(request, f"Book #{id} does not exist.")
+            return redirect("book:book_list")
 
-    return redirect("book:book_list")
+    book = get_object_or_404(Book, pk=id)
+    return render(request, "book_edit.html", {"book": book})
+
+
+@user_passes_test(is_admin)
+def book_create(request: HttpRequest) -> HttpResponse:
+    if request.method == "POST":
+        name = request.POST.get("name", "").strip()
+        description = request.POST.get("description", "").strip()
+        count = int(request.POST.get("count", 0))
+        author_ids = request.POST.getlist("authors")
+
+        book = Book(name=name, description=description, count=count)
+        book.save()
+        book.authors.set(author_ids)
+
+        messages.success(request, "Book has been created.")
+        return redirect("book:book_list")
+
+    return render(request, "book_create.html")
