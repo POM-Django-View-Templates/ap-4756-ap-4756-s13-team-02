@@ -1,15 +1,32 @@
 {% extends "base.html" %}
 
-{% block title %}User List - Library{% endblock %}
+{% block title %}Author List - Library{% endblock %}
+
+{% block extra_css %}
+<style>
+    .tr-delete-cell button {
+        opacity: 0;
+        transition: opacity 0.2s;
+    }
+
+    tr:hover .tr-delete-cell button {
+        opacity: 1;
+    }
+
+    tbody tr:hover .tr-delete-cell {
+        opacity: 1;
+    }
+</style>
+{% endblock %}
 
 {% block content %}
 <!-- Header Row -->
 <div class="d-flex justify-content-between align-items-center mb-4 pt-2">
     <h1 class="h2 page-title mb-0">
-        <i class="bi bi-people"></i> Users
+        <i class="bi bi-feather"></i> Authors
     </h1>
     <span class="count-pill">
-        <i class="bi bi-people"></i> Total: {{ users|length }}
+        <i class="bi bi-feather"></i> Total: {{ authors|length }}
     </span>
 </div>
 
@@ -22,46 +39,105 @@
     {% endfor %}
 {% endif %}
 
-<!-- Users Table Card -->
-<div class="card glossy-card overflow-hidden">
+<!-- Add Author Card -->
+<div class="card glossy-card overflow-hidden mb-4">
     <div class="table-responsive">
+        <form method="post" action="{% url 'author:create' %}">
+            {% csrf_token %}
+            <table class="table table-glossy align-middle mb-0">
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="input-group input-group-glossy">
+                                <input
+                                    type="text"
+                                    class="form-control text-center"
+                                    name="surname"
+                                    placeholder="Last Name"
+                                    required
+                                >
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-glossy">
+                                <input
+                                    type="text"
+                                    class="form-control text-center"
+                                    name="name"
+                                    placeholder="First Name"
+                                    required
+                                >
+                            </div>
+                        </td>
+                        <td class="fw-semibold text-white">
+                            <div class="input-group input-group-glossy">
+                                <input
+                                    type="text"
+                                    class="form-control text-center"
+                                    name="patronymic"
+                                    placeholder="Middle Name"
+                                >
+                            </div>
+                        </td>
+                        <td>
+                            <button type="submit" class="btn btn-glossy-primary">
+                                <i class="bi bi-plus-square me-1"></i> Add Author
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </form>
+    </div>
+</div>
+
+<!-- authors Table Card -->
+<div class="card glossy-card overflow-hidden mb-4">
+    <div class="table-responsive" style="overflow-y: auto;">
         <table class="table table-glossy align-middle mb-0">
             <thead>
                 <tr>
                     <th scope="col">ID</th>
-                    <th scope="col">First Name</th>
                     <th scope="col">Last Name</th>
-                    <th scope="col">Email</th>
+                    <th scope="col">First Name</th>
+                    <th scope="col">Middle Name</th>
+                    <th scope="col">Books</th>
+                    <th scope="col">Actions</th>
                 </tr>
             </thead>
             <tbody>
-                {% for user in users %}
-                    <tr>
-                        <td class="font-monospace small">
-                            <a href="{% url 'user:user' user.id %}" class="deco-link text-decoration-none" style="color: #818cf8;">
-                                #{{ user.id }}
-                            </a>
+                {% for author in authors %}
+                    <tr style="position: relative;">
+                        <td class="fw-semibold text-white">
+                            {{ author.id }}
                         </td>
                         <td class="fw-semibold text-white">
-                            {{ user.first_name|default:"—" }}
+                            {{ author.surname|default:"—" }}
                         </td>
                         <td class="fw-semibold text-white">
-                            {{ user.last_name|default:"—" }}
+                            {{ author.name|default:"—" }}
                         </td>
-                        <td class="text-white fst-italic small">
-                            {% if user.email %}
-                                <i class="bi bi-envelope me-1 opacity-75"></i>{{ user.email }}
-                            {% else %}
-                                —
-                            {% endif %}
+                        <td class="fw-semibold text-white">
+                            {{ author.patronymic|default:"—" }}
+                        </td>
+                        <td class="fw-semibold text-white">
+                            {{ author.books.count }}
+                        </td>
+                        <td class="tr-delete-cell text-nowrap">
+                            <form method="post" action="{% url 'author:delete' author.id %}" style="display:inline;" onsubmit="return confirm('Delete this author?');">
+                                {% csrf_token %}
+                                <button type="submit" class="action-btn action-btn-delete">
+                                    <i class="bi bi-trash"></i> DELETE
+                                </button>
+                            </form>
                         </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="4" class="text-center py-5 text-secondary">
+                        <td colspan="6" class="text-center py-5 text-secondary">
                             <i class="bi bi-people display-5 d-block mb-3" style="opacity: 0.4;"></i>
-                            <span class="fw-semibold d-block text-light mb-1">No users found</span>
-                            <span class="small">There are currently no registered users in the database.</span>
+                            <span class="fw-semibold d-block text-light mb-1">No authors found</span>
+                            <span class="small">There are currently no registered authors in the database.</span>
                         </td>
                     </tr>
                 {% endfor %}
@@ -69,4 +145,5 @@
         </table>
     </div>
 </div>
+
 {% endblock %}
