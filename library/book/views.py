@@ -1,3 +1,4 @@
+from author.models import Author
 from django.contrib import messages
 from django.contrib.auth.decorators import user_passes_test
 from django.contrib.auth.models import User
@@ -69,7 +70,9 @@ def book_edit(request: HttpRequest, id: int) -> HttpResponse:
             return redirect("book:book_list")
 
     book = get_object_or_404(Book, pk=id)
-    return render(request, "book_edit.html", {"book": book})
+    return render(
+        request, "book_edit.html", {"book": book, "all_authors": Author.objects.all()}
+    )
 
 
 @user_passes_test(is_admin)
@@ -87,4 +90,4 @@ def book_create(request: HttpRequest) -> HttpResponse:
         messages.success(request, "Book has been created.")
         return redirect("book:book_list")
 
-    return render(request, "book_create.html")
+    return render(request, "book_create.html", {"all_authors": Author.objects.all()})
