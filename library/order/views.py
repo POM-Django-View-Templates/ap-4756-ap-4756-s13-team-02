@@ -50,7 +50,7 @@ def create_order(request, book_id=None):
                 request,
                 "Unable to create order. The book might be out of stock or unavailable.",
             )
-            return redirect("book:home")
+            return redirect("book:book_list")
 
     books = Book.objects.filter(count__gt=0)
     selected_book = get_object_or_404(Book, pk=book_id) if book_id else None

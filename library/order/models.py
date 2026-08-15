@@ -79,11 +79,13 @@ class Order(models.Model):
         for order in orders:
             if not order.end_at:
                 books.add(order.book.id)
-        if book.id in books and book.count == 1:
+        if book.id in books and book.count <= 0:
             return None
         try:
             order = Order(user=user, book=book, plated_end_at=plated_end_at)
             order.save()
+            book.count -= 1
+            book.save()
             return order
         except ValueError:
             return None
